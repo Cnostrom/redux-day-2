@@ -1,28 +1,47 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
 import './App.css';
+import { connect } from 'react-redux';
+import { addOne } from './redux/actions';
+import { addCustomNumber } from './redux/actions';
 
 class App extends Component {
+  state={
+    inputNumber: ""
+  }
+
+  onInputChange = (e) => {
+    this.setState({inputNumber: e.target.value})
+  }
+
   render() {
     return (
       <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <p>
-            Edit <code>src/App.js</code> and save to reload.
-          </p>
-          <a
-            className="App-link"
-            href="https://reactjs.org"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Learn React
-          </a>
-        </header>
+        <h1>{this.props.number}</h1>
+        <button 
+          onClick={() => this.props.addOne()}
+        >Click here to plus one</button>
+        <br />
+        <input value={this.state.inputNumber} onChange={this.onInputChange}/>
+        <button onClick={() => this.props.addCustomNumber(Number(this.state.inputNumber))}
+        >Click here to add</button>
+
+        {/* <button onClick={() => this.props.dispatch(addCustomNumber(Number(this.state.inputNumber)))} */}
       </div>
     );
   }
 }
 
-export default App;
+const mapStateToProps = (state) => {
+  return {
+    number: state.number
+  }
+}
+
+// const mapDispatchToProps = dispatch => {
+//   return {
+//     addOne: () =>  dispatch(addOne()),
+//     addCustomNumber: () => dispatch(addCustomNumber())
+//   }
+// }
+
+export default connect(mapStateToProps, {addOne, addCustomNumber})(App);
